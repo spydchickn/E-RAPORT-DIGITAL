@@ -1,0 +1,38 @@
+{{ define "admin/kelas_list.html" }}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Daftar Kelas</strong>
+        <a href="/kelas/create" class="btn btn-sm btn-primary">Tambah Kelas</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nama Kelas</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range . }}
+                <tr>
+                    <td>{{ .NamaKelas }}</td>
+                    <td>
+                        <a
+                            class="btn btn-sm btn-danger"
+                            href="/kelas/delete?id={{ .IDKelas }}"
+                            >Hapus</a
+                        >
+                    </td>
+                </tr>
+                {{ else }}
+                <tr>
+                    <td colspan="2" class="text-center">
+                        Tidak ada data kelas
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{ end }}

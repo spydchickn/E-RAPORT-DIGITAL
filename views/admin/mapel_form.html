@@ -1,0 +1,14 @@
+{{ define "admin/mapel_form.html" }}
+<div class="card">
+    <div class="card-header"><strong>Tambah Mapel</strong></div>
+    <div class="card-body">
+        <form method="post" action="/mapel/store">
+            <div class="mb-3">
+                <label class="form-label">Nama Mapel</label>
+                <input name="nama" class="form-control" />
+            </div>
+            <button class="btn btn-primary">Simpan</button>
+        </form>
+    </div>
+</div>
+{{ end }}

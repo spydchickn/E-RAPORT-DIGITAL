@@ -1,0 +1,37 @@
+{{ define "siswa/create.html" }}
+<div class="container py-4">
+    <h3>{{ if .ID }}Edit Siswa{{ else }}Tambah Siswa{{ end }}</h3>
+    <form
+        action="{{ if .ID }}/siswa/update{{ else }}/siswa/store{{ end }}"
+        method="POST"
+    >
+        {{ if .ID }}<input type="hidden" name="id" value="{{ .ID }}" />{{ end }}
+        <input type="hidden" name="user_id" value="{{ .UserID }}" />
+        <div class="mb-3">
+            <label class="form-label">NIS</label>
+            <input
+                class="form-control"
+                name="nis"
+                value="{{ .NIS }}"
+                required
+            />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input
+                class="form-control"
+                name="nama"
+                value="{{ .Nama }}"
+                required
+            />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Alamat</label>
+            <textarea class="form-control" name="alamat">
+{{ .Alamat }}</textarea
+            >
+        </div>
+        <button class="btn btn-primary">Simpan</button>
+    </form>
+</div>
+{{ end }}

@@ -1,0 +1,94 @@
+{{ define "admin/presensi_list.html" }}
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 fw-bold"><i class="bi bi-calendar-check"></i> Daftar Presensi</h3>
+        <a href="/admin/presensi/create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tambah Presensi
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="text" class="form-control" id="search" placeholder="Cari siswa atau mapel...">
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" id="filterKelas">
+            <option value="">Semua Kelas</option>
+            {{ range .Kelas }}
+            <option value="{{ .IDKelas }}">{{ .NamaKelas }}</option>
+            {{ end }}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <input type="date" class="form-control" id="filterTanggal">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-outline-secondary w-100" id="filterBtn">Filter</button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="presensiTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Siswa</th>
+                        <th>Mapel</th>
+                        <th>Tanggal</th>
+                        <th>Status</th>
+                        <th>Catatan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Presensi }}
+                    <tr>
+                        <td>{{ .NamaSiswa }}</td>
+                        <td>{{ .NamaMapel }}</td>
+                        <td>{{ .Tanggal.Format "2006-01-02" }}</td>
+                        <td>
+                            <span class="badge bg-{{ if eq .Status "Hadir" }}success{{ else if eq .Status "Sakit" }}warning{{ else if eq .Status "Izin" }}info{{ else }}danger{{ end }}">
+                                {{ .Status }}
+                            </span>
+                        </td>
+                        <td>{{ .Catatan }}</td>
+                        <td>
+                            <a href="/admin/presensi/edit?id={{ .IDPresensi }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a href="/admin/presensi/delete?id={{ .IDPresensi }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus presensi ini?')">
+                                <i class="bi bi-trash"></i> Hapus
+                            </a>
+                        </td>
+                    </tr>
+                    {{ else }}
+                    <tr>
+                        <td colspan="6" class="text-center">Tidak ada data presensi</td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple client-side filter (placeholder; enhance with AJAX later)
+    document.getElementById('filterBtn').addEventListener('click', function() {
+        const search = document.getElementById('search').value.toLowerCase();
+        const kelas = document.getElementById('filterKelas').value;
+        const tanggal = document.getElementById('filterTanggal').value;
+        const rows = document.querySelectorAll('#presensiTable tbody tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const matchSearch = !search || text.includes(search);
+            const matchKelas = !kelas || row.cells[0].textContent.includes(kelas); // Placeholder
+            const matchTanggal = !tanggal || row.cells[2].textContent === tanggal;
+            row.style.display = matchSearch && matchKelas && matchTanggal ? '' : 'none';
+        });
+    });
+</script>
+
+{{ end }}

@@ -1,0 +1,62 @@
+{{ define "admin/presensi_edit.html" }}
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 fw-bold"><i class="bi bi-pencil-square"></i> Edit Presensi</h3>
+        <a href="/admin/presensi/list" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form action="/admin/presensi/update" method="post">
+            <input type="hidden" name="id_presensi" value="{{ .Presensi.IDPresensi }}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="id_siswa" class="form-label">Siswa</label>
+                    <select class="form-select" id="id_siswa" name="id_siswa" required>
+                        <option value="">Pilih Siswa</option>
+                        {{ range .Siswa }}
+                        <option value="{{ .IDSiswa }}" {{ if eq .IDSiswa $.Presensi.IDSiswa }}selected{{ end }}>{{ .Nama }} ({{ .NIS }})</option>
+                        {{ end }}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="id_mapel" class="form-label">Mata Pelajaran</label>
+                    <select class="form-select" id="id_mapel" name="id_mapel" required>
+                        <option value="">Pilih Mapel</option>
+                        {{ range .Mapel }}
+                        <option value="{{ .IDMapel }}" {{ if eq .IDMapel $.Presensi.IDMapel }}selected{{ end }}>{{ .NamaMapel }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="tanggal" class="form-label">Tanggal</label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ .Presensi.Tanggal.Format "2006-01-02" }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Hadir" {{ if eq .Presensi.Status "Hadir" }}selected{{ end }}>Hadir</option>
+                        <option value="Sakit" {{ if eq .Presensi.Status "Sakit" }}selected{{ end }}>Sakit</option>
+                        <option value="Izin" {{ if eq .Presensi.Status "Izin" }}selected{{ end }}>Izin</option>
+                        <option value="Alfa" {{ if eq .Presensi.Status "Alfa" }}selected{{ end }}>Alfa</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label for="catatan" class="form-label">Catatan</label>
+                    <textarea class="form-control" id="catatan" name="catatan" rows="3">{{ .Presensi.Catatan }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Update
+                </button>
+                <a href="/admin/presensi/list" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{ end }}

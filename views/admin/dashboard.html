@@ -1,0 +1,224 @@
+{{ define "admin/dashboard.html" }}
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 fw-bold"><i class="bi bi-house-door text-primary"></i> Dashboard Admin</h3>
+        <small class="text-muted">Selamat datang, Admin</small>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <i class="bi bi-people-fill text-primary mb-2" style="font-size: 2rem;"></i>
+                <h6 class="card-title fw-bold">Total Siswa</h6>
+                <h2 class="mb-0 text-primary">{{ index . "Siswa" }}</h2>
+                <small class="text-muted">Orang</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <i class="bi bi-person-badge-fill text-success mb-2" style="font-size: 2rem;"></i>
+                <h6 class="card-title fw-bold">Total Guru</h6>
+                <h2 class="mb-0 text-success">{{ index . "Guru" }}</h2>
+                <small class="text-muted">Orang</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <i class="bi bi-person-circle text-info mb-2" style="font-size: 2rem;"></i>
+                <h6 class="card-title fw-bold">Total Pengguna</h6>
+                <h2 class="mb-0 text-info">{{ index . "Users" }}</h2>
+                <small class="text-muted">Akun</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <i class="bi bi-book-half text-warning mb-2" style="font-size: 2rem;"></i>
+                <h6 class="card-title fw-bold">Mata Pelajaran</h6>
+                <h2 class="mb-0 text-warning">{{ index . "Mapel" }}</h2>
+                <small class="text-muted">Mapel</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body p-4">
+                <i class="bi bi-building text-secondary mb-2" style="font-size: 2rem;"></i>
+                <h6 class="card-title fw-bold">Kelas</h6>
+                <h2 class="mb-0 text-secondary">{{ index . "Kelas" }}</h2>
+                <small class="text-muted">Kelas</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card">
+            <div
+                class="card-header d-flex justify-content-between align-items-center"
+            >
+                <strong>Data Siswa Terbaru</strong>
+                <a href="/siswa/list" class="btn btn-sm btn-outline-primary"
+                    >Lihat semua</a
+                >
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIS</th>
+                                <th>Kelas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ $recent := index . "Recent" }} {{ if $recent }}
+                            {{ range $i, $s := $recent }}
+                            <tr>
+                                <td>{{ $s.Nama }}</td>
+                                <td>{{ $s.NIS }}</td>
+                                <td>
+                                    {{ if $s.IDKelas.Valid }}{{ $s.IDKelas.Int64
+                                    }}{{ else }}-{{ end }}
+                                </td>
+                                <td>
+                                    <a
+                                        class="btn btn-sm btn-outline-secondary"
+                                        href="/siswa?id={{ $s.IDSiswa }}"
+                                        >Detail</a
+                                    >
+                                </td>
+                            </tr>
+                            {{ end }} {{ else }}
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Tidak ada data siswa
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card mb-3">
+            <div class="card-header"><strong>Navigasi Cepat</strong></div>
+            <div class="list-group list-group-flush">
+                <a
+                    href="/siswa/create"
+                    class="list-group-item list-group-item-action"
+                    >Tambah Siswa</a
+                >
+                <a
+                    href="/users/list"
+                    class="list-group-item list-group-item-action"
+                    >Manajemen Pengguna</a
+                >
+                <a
+                    href="/guru/create"
+                    class="list-group-item list-group-item-action"
+                    >Tambah Guru</a
+                >
+                <a
+                    href="/mapel/create"
+                    class="list-group-item list-group-item-action"
+                    >Tambah Mapel</a
+                >
+                <a
+                    href="/kelas/create"
+                    class="list-group-item list-group-item-action"
+                    >Tambah Kelas</a
+                >
+                <a
+                    href="/guru/input-nilai"
+                    class="list-group-item list-group-item-action"
+                    >Input Nilai</a
+                >
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><strong>Aktivitas Terakhir</strong></div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <small class="text-muted">12:30</small> <br />
+                        <strong>Rina Sari</strong> ditambahkan oleh
+                        <em>admin</em>
+                    </li>
+                    <li class="mb-2">
+                        <small class="text-muted">10:15</small> <br />
+                        <strong>Data nilai</strong> diunggah oleh <em>guru</em>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Grafik Rata-Rata Nilai per Kelas</strong>
+            </div>
+            <div class="card-body">
+                <canvas id="rataRataChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('rataRataChart').getContext('2d');
+    const rataRataChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['X IPA 1', 'X IPS 1', 'XI IPA 1', 'XII IPS 1'],
+            datasets: [{
+                label: 'Rata-Rata Nilai',
+                data: [85, 78, 82, 79],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+
+<footer class="mt-4">
+    <small class="text-muted">© Sekolah - Sistem E-Raport</small>
+</footer>
+
+{{ end }}
