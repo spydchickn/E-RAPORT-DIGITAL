@@ -6,8 +6,10 @@ import (
     "log"
     "net/http"
     "strconv"
+    "strings"
 
     "e_raport_digital/config"
+    "e_raport_digital/middlewares"
     "e_raport_digital/models"
     "e_raport_digital/utils"
 )
@@ -62,28 +64,35 @@ func PresensiList(w http.ResponseWriter, r *http.Request) {
     mapel, _ := models.GetAllMapel()
     kelas, _ := models.GetAllKelas()
 
-    data := map[string]interface{}{
-        "Presensi": presensi,
-        "Siswa":    siswa,
-        "Mapel":    mapel,
-        "Kelas":    kelas,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/admin/presensi_list.html"))
-    tmpl.Execute(w, data)
+    // Use global templates and base layout
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Daftar Presensi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("admin/presensi_list.html", map[string]interface{}{
+            "Presensi": presensi,
+            "Siswa":    siswa,
+            "Mapel":    mapel,
+            "Kelas":    kelas,
+        })),
+    })
 }
 
 func PresensiCreateForm(w http.ResponseWriter, r *http.Request) {
     siswa, _ := models.GetAllSiswa()
     mapel, _ := models.GetAllMapel()
 
-    data := map[string]interface{}{
-        "Siswa": siswa,
-        "Mapel": mapel,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/admin/presensi_create.html"))
-    tmpl.Execute(w, data)
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Tambah Presensi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("admin/presensi_create.html", map[string]interface{}{
+            "Siswa": siswa,
+            "Mapel": mapel,
+        })),
+    })
 }
 
 func PresensiStore(w http.ResponseWriter, r *http.Request) {
@@ -95,7 +104,7 @@ func PresensiStore(w http.ResponseWriter, r *http.Request) {
     idSiswa, _ := strconv.Atoi(r.FormValue("id_siswa"))
     idMapel, _ := strconv.Atoi(r.FormValue("id_mapel"))
     tanggal := r.FormValue("tanggal")
-    status := r.FormValue("status")
+    status := strings.ToLower(r.FormValue("status"))
     catatan := r.FormValue("catatan")
 
     err := models.CreatePresensi(idSiswa, idMapel, 0, tanggal, status, catatan)
@@ -125,14 +134,17 @@ func PresensiEditForm(w http.ResponseWriter, r *http.Request) {
     siswa, _ := models.GetAllSiswa()
     mapel, _ := models.GetAllMapel()
 
-    data := map[string]interface{}{
-        "Presensi": presensi,
-        "Siswa":    siswa,
-        "Mapel":    mapel,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/admin/presensi_edit.html"))
-    tmpl.Execute(w, data)
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Edit Presensi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("admin/presensi_edit.html", map[string]interface{}{
+            "Presensi": presensi,
+            "Siswa":    siswa,
+            "Mapel":    mapel,
+        })),
+    })
 }
 
 func PresensiUpdate(w http.ResponseWriter, r *http.Request) {
@@ -145,7 +157,7 @@ func PresensiUpdate(w http.ResponseWriter, r *http.Request) {
     idSiswa, _ := strconv.Atoi(r.FormValue("id_siswa"))
     idMapel, _ := strconv.Atoi(r.FormValue("id_mapel"))
     tanggal := r.FormValue("tanggal")
-    status := r.FormValue("status")
+    status := strings.ToLower(r.FormValue("status"))
     catatan := r.FormValue("catatan")
 
     err := models.UpdatePresensi(id, idSiswa, idMapel, 0, tanggal, status, catatan)
@@ -184,13 +196,16 @@ func GuruPresensiInputForm(w http.ResponseWriter, r *http.Request) {
     siswa, _ := models.GetAllSiswa()
     mapel, _ := models.GetAllMapel()
 
-    data := map[string]interface{}{
-        "Siswa": siswa,
-        "Mapel": mapel,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/guru/presensi_input.html"))
-    tmpl.Execute(w, data)
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Input Presensi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("guru/presensi_input.html", map[string]interface{}{
+            "Siswa": siswa,
+            "Mapel": mapel,
+        })),
+    })
 }
 
 func GuruPresensiStore(w http.ResponseWriter, r *http.Request) {

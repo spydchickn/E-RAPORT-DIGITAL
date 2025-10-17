@@ -14,10 +14,8 @@ type Siswa struct {
     IDKelas        sql.NullInt64
     IDUser         sql.NullInt64
     OrtuNama       string
-    OrtuPekerjaan  string
-    OrtuAlamat     string
-    OrtuTelepon    string
-    OTP            string
+    OrtuEmail      string
+    OrtuTelp       string
 }
 
 func GetAllSiswa() ([]Siswa, error) {
@@ -63,15 +61,21 @@ func GetSiswaByID(id int) (*Siswa, error) {
     return &s, nil
 }
 
-func CreateSiswa(nis, nama, alamat, foto, ortuNama, ortuPekerjaan, ortuAlamat, ortuTelepon, otp string, idUser int64) (int64, error) {
+func CreateSiswa(nis, nama, alamat, foto, ortuNama, ortuEmail, ortuTelp string, idUser int64) (int64, error) {
     if idUser > 0 {
-        res, err := config.DB.Exec("INSERT INTO siswa (nis, nama, alamat, foto, ortu_nama, ortu_pekerjaan, ortu_alamat, ortu_telepon, otp, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", nis, nama, alamat, foto, ortuNama, ortuPekerjaan, ortuAlamat, ortuTelepon, otp, idUser)
+        res, err := config.DB.Exec(
+            "INSERT INTO siswa (nis, nama, alamat, foto, ortu_nama, ortu_email, ortu_telp, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            nis, nama, alamat, foto, ortuNama, ortuEmail, ortuTelp, idUser,
+        )
         if err != nil {
             return 0, err
         }
         return res.LastInsertId()
     }
-    res, err := config.DB.Exec("INSERT INTO siswa (nis, nama, alamat, foto, ortu_nama, ortu_pekerjaan, ortu_alamat, ortu_telepon, otp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", nis, nama, alamat, foto, ortuNama, ortuPekerjaan, ortuAlamat, ortuTelepon, otp)
+    res, err := config.DB.Exec(
+        "INSERT INTO siswa (nis, nama, alamat, foto, ortu_nama, ortu_email, ortu_telp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        nis, nama, alamat, foto, ortuNama, ortuEmail, ortuTelp,
+    )
     if err != nil {
         return 0, err
     }

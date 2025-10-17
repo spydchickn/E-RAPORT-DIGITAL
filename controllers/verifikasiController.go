@@ -8,6 +8,7 @@ import (
     "strconv"
 
     "e_raport_digital/config"
+    "e_raport_digital/middlewares"
     "e_raport_digital/models"
     "e_raport_digital/utils"
 )
@@ -57,12 +58,15 @@ func VerifikasiList(w http.ResponseWriter, r *http.Request) {
         nilai = append(nilai, n)
     }
 
-    data := map[string]interface{}{
-        "Nilai": nilai,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/admin/verifikasi_list.html"))
-    tmpl.Execute(w, data)
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Verifikasi Nilai",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("admin/verifikasi_list.html", map[string]interface{}{
+            "Nilai": nilai,
+        })),
+    })
 }
 
 func VerifikasiStore(w http.ResponseWriter, r *http.Request) {

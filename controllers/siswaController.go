@@ -127,10 +127,8 @@ func SiswaStore(w http.ResponseWriter, r *http.Request) {
     alamat := r.FormValue("alamat")
     foto := r.FormValue("foto")
     ortu_nama := r.FormValue("ortu_nama")
-    ortu_pekerjaan := r.FormValue("ortu_pekerjaan")
-    ortu_alamat := r.FormValue("ortu_alamat")
-    ortu_telepon := r.FormValue("ortu_telepon")
-    otp := r.FormValue("otp")
+    ortu_email := r.FormValue("ortu_email")
+    ortu_telp := r.FormValue("ortu_telp")
     // if a user_id was provided (admin pre-linked), use it; otherwise create a user for siswa
     userIDStr := r.FormValue("user_id")
     var idUser int64
@@ -154,7 +152,7 @@ func SiswaStore(w http.ResponseWriter, r *http.Request) {
             return
         }
     }
-    _, err := models.CreateSiswa(nis, nama, alamat, foto, ortu_nama, ortu_pekerjaan, ortu_alamat, ortu_telepon, otp, idUser)
+    _, err := models.CreateSiswa(nis, nama, alamat, foto, ortu_nama, ortu_email, ortu_telp, idUser)
     if err != nil {
         // try to rollback user creation
         if userIDStr == "" {

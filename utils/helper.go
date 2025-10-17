@@ -23,8 +23,15 @@ func KonversiNilai(nilai int) string {
 // Helper function to get user ID from session
 func GetUserIDFromSession(r *http.Request) int {
     session, _ := middlewares.Store.Get(r, "session")
-    if session.Values["user_id"] != nil {
-        return session.Values["user_id"].(int)
+    v := session.Values["user_id"]
+    switch t := v.(type) {
+    case int:
+        return t
+    case int64:
+        return int(t)
+    case float64:
+        return int(t)
+    default:
+        return 0
     }
-    return 0
 }

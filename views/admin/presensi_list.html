@@ -47,7 +47,7 @@
                     <tr>
                         <td>{{ .NamaSiswa }}</td>
                         <td>{{ .NamaMapel }}</td>
-                        <td>{{ .Tanggal.Format "2006-01-02" }}</td>
+                        <td>{{ .Tanggal }}</td>
                         <td>
                             <span class="badge bg-{{ if eq .Status "Hadir" }}success{{ else if eq .Status "Sakit" }}warning{{ else if eq .Status "Izin" }}info{{ else }}danger{{ end }}">
                                 {{ .Status }}

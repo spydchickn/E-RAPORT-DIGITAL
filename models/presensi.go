@@ -2,6 +2,7 @@ package models
 
 import (
     "database/sql"
+    "time"
 )
 
 type Presensi struct {
@@ -9,7 +10,7 @@ type Presensi struct {
     IDSiswa    int
     IDMapel    int
     IDGuru     int
-    Tanggal    sql.NullTime  // For DATE field
+    Tanggal    time.Time
     Status     string
     Catatan    sql.NullString
 }

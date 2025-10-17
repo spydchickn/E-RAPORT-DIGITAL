@@ -19,7 +19,12 @@ func AuthMiddleware(role string, next http.HandlerFunc) http.HandlerFunc {
             return
         }
         userRole, ok := v.(string)
-        if !ok || userRole != role {
+        if !ok {
+            http.Redirect(w, r, "/login", http.StatusSeeOther)
+            return
+        }
+        // If role is empty, allow any authenticated role
+        if role != "" && userRole != role {
             http.Redirect(w, r, "/login", http.StatusSeeOther)
             return
         }

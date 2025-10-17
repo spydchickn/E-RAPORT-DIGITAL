@@ -2,6 +2,7 @@ package utils
 
 import (
     "fmt"
+    "os"
     "path/filepath"
     "e_raport_digital/models"
     "github.com/jung-kurt/gofpdf"
@@ -47,6 +48,8 @@ func ExportRaportPDF(raport *models.Raport, filename string) error {
     pdf.Cell(120.0, 10.0, fmt.Sprintf("Rata-rata: %.2f", raport.RataRata))
 
     // Save file
+    // Ensure exports directory exists
+    _ = os.MkdirAll("exports", 0o755)
     fullPath := filepath.Join("exports", filename)
     err := pdf.OutputFileAndClose(fullPath)
     if err != nil {

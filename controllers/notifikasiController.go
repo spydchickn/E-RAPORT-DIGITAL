@@ -32,13 +32,14 @@ func NotifikasiList(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    data := map[string]interface{}{
-        "Notifikasi": notifs,
-        "Role":       role,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/notifikasi_list.html"))
-    tmpl.Execute(w, data)
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Notifikasi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("notifikasi_list.html", map[string]interface{}{
+            "Notifikasi": notifs,
+            "Role":       role,
+        })),
+    })
 }
 
 func NotifikasiMarkRead(w http.ResponseWriter, r *http.Request) {
@@ -61,13 +62,13 @@ func NotifikasiMarkRead(w http.ResponseWriter, r *http.Request) {
 
 func NotifikasiBroadcastForm(w http.ResponseWriter, r *http.Request) {
     siswa, _ := models.GetAllSiswa()
-
-    data := map[string]interface{}{
-        "Siswa": siswa,
-    }
-
-    tmpl := template.Must(template.ParseFiles("views/layouts/base.html", "views/notifikasi_broadcast.html"))
-    tmpl.Execute(w, data)
+    session, _ := middlewares.Store.Get(r, "session")
+    role := session.Values["role"]
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
+        "Title":   "Kirim Notifikasi",
+        "Role":    role,
+        "Content": template.HTML(utils.RenderPartial("notifikasi_broadcast.html", map[string]interface{}{"Siswa": siswa})),
+    })
 }
 
 func NotifikasiBroadcastStore(w http.ResponseWriter, r *http.Request) {
@@ -84,8 +85,15 @@ func NotifikasiBroadcastStore(w http.ResponseWriter, r *http.Request) {
         role := r.FormValue("role")
         err = models.CreateNotif(sql.NullInt64{}, sql.NullString{String: role, Valid: true}, pesan)
     } else {
+        // Translate siswa id to linked users.id (id_user)
         idSiswa, _ := strconv.Atoi(r.FormValue("id_siswa"))
-        err = models.CreateNotif(sql.NullInt64{Int64: int64(idSiswa), Valid: true}, sql.NullString{}, pesan)
+        siswa, _ := models.GetSiswaByID(idSiswa)
+        if siswa != nil && siswa.IDUser.Valid {
+            err = models.CreateNotif(sql.NullInt64{Int64: siswa.IDUser.Int64, Valid: true}, sql.NullString{}, pesan)
+        } else {
+            // Fallback: no linked user, treat as error
+            err = sql.ErrNoRows
+        }
     }
 
     if err != nil {

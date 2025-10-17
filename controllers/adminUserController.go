@@ -37,7 +37,7 @@ func UsersList(w http.ResponseWriter, r *http.Request) {
     }
     session, _ := middlewares.Store.Get(r, "session")
     role := session.Values["role"]
-    utils.Templates.ExecuteTemplate(w, "base", map[string]interface{}{
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
         "Title":   "Manajemen Pengguna",
         "Role":    role,
         "Content": template.HTML(utils.RenderPartial("admin/users_list.html", viewList)),
@@ -49,7 +49,7 @@ func UserCreateForm(w http.ResponseWriter, r *http.Request) {
     role := r.URL.Query().Get("role")
     session, _ := middlewares.Store.Get(r, "session")
     userRole := session.Values["role"]
-    utils.Templates.ExecuteTemplate(w, "base", map[string]interface{}{
+    utils.Templates.ExecuteTemplate(w, "layouts/base.html", map[string]interface{}{
         "Title":   "Tambah Pengguna",
         "Role":    userRole,
         "Content": template.HTML(utils.RenderPartial("admin/user_form.html", map[string]string{"Role": role})),
