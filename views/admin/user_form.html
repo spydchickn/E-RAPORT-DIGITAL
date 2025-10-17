@@ -1,0 +1,31 @@
+{{ define "admin/user_form.html" }}
+<div class="card">
+    <div class="card-header"><strong>Tambah Pengguna</strong></div>
+    <div class="card-body">
+        <form method="post" action="/users/store">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input name="username" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input
+                    name="password"
+                    type="password"
+                    class="form-control"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select name="role" class="form-select">
+                    <option value="admin" {{ if eq .Role "admin" }}selected{{ end }}>Admin</option>
+                    <option value="guru" {{ if eq .Role "guru" }}selected{{ end }}>Guru</option>
+                    <option value="siswa" {{ if eq .Role "siswa" }}selected{{ end }}>Siswa</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">Buat Pengguna</button>
+        </form>
+    </div>
+</div>
+{{ end }}

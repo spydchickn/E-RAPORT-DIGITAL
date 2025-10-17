@@ -1,0 +1,38 @@
+{{ define "admin/mapel_list.html" }}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Daftar Mata Pelajaran</strong>
+        <a href="/mapel/create" class="btn btn-sm btn-primary">Tambah Mapel</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nama Mapel</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range . }}
+                <tr>
+                    <td>{{ .NamaMapel }}</td>
+                    <td>
+                        <a
+                            class="btn btn-sm btn-danger"
+                            href="/mapel/delete?id={{ .IDMapel }}"
+                            >Hapus</a
+                        >
+                    </td>
+                </tr>
+                {{ else }}
+                <tr>
+                    <td colspan="2" class="text-center">
+                        Tidak ada data mapel
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{ end }}

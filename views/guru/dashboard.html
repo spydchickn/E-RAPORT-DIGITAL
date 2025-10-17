@@ -1,0 +1,44 @@
+{{ define "guru/dashboard.html" }}
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 fw-bold"><i class="bi bi-house-door text-primary"></i> Dashboard Guru</h3>
+        <small class="text-muted">Selamat datang, Guru</small>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-people-fill text-primary mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title fw-bold">Kelola Siswa</h5>
+                <p class="card-text text-muted">Lihat daftar siswa dan input nilai mereka.</p>
+                <a href="/siswa/list" class="btn btn-primary btn-lg">Lihat Siswa</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-pencil-square text-success mb-3" style="font-size: 3rem;"></i>
+                <h5 class="card-title fw-bold">Input Nilai</h5>
+                <p class="card-text text-muted">Masukkan nilai siswa untuk mata pelajaran yang diajar.</p>
+                <a href="/guru/input-nilai" class="btn btn-success btn-lg">Input Nilai</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-info-circle"></i> Tips Hari Ini</h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Pastikan data nilai yang dimasukkan akurat untuk membantu siswa berkembang. Gunakan fitur input nilai untuk update terbaru.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

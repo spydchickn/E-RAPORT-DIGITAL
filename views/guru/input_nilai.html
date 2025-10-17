@@ -1,0 +1,32 @@
+{{ define "guru/input_nilai.html" }}
+<div class="card">
+    <div class="card-header"><strong>Input Nilai</strong></div>
+    <div class="card-body">
+        <form method="post" action="/guru/store-nilai">
+            <div class="mb-3">
+                <label class="form-label">Pilih Siswa</label>
+                <select name="id_siswa" class="form-control" required>
+                    <option value="">-- Pilih Siswa --</option>
+                    {{ range .Siswa }}
+                    <option value="{{ .IDSiswa }}">{{ .Nama }} ({{ .NIS }})</option>
+                    {{ end }}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pilih Mapel</label>
+                <select name="id_mapel" class="form-control" required>
+                    <option value="">-- Pilih Mapel --</option>
+                    {{ range .Mapels }}
+                    <option value="{{ .IDMapel }}">{{ .NamaMapel }}</option>
+                    {{ end }}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nilai (0-100)</label>
+                <input type="number" name="nilai" class="form-control" min="0" max="100" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan Nilai</button>
+        </form>
+    </div>
+</div>
+{{ end }}
